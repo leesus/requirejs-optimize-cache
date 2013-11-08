@@ -2,7 +2,7 @@
   "name": "requirejs-optimize-cache",
   "version": "0.0.1",
   "description": "Analyse require.js optimised files, rename files with MD5 string and map paths in require.config",
-  "main": "index.js",
+  "main": "src/requirejs-optimize-cache.js",
   "scripts": {
     "test": "npm test"
   },
@@ -10,7 +10,7 @@
     "MD5": "*",
     "walk": "*",
     "underscore": "*",
-    "optimist": "*"
+    "commander": "*"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,9 @@
   "directories": {
     "test": "test"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "*"  
+  },
   "bugs": {
     "url": "https://github.com/leesus/requirejs-optimize-cache/issues"
   }
