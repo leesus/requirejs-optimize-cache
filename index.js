@@ -1,6 +1,6 @@
 'use strict';
 
-var walker = require('./walker.js');
+var walker = require('./src/walker.js');
 
 module.exports = init;
 
