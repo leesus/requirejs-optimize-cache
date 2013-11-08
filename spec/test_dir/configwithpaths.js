@@ -1,0 +1,1 @@
+requirejs.config({baseUrl:"/scripts/dist/",paths:{"file1":"submodule1/file1"}}),define("jquery",[],function(){return window.jQuery}),define("ko",[],function(){return window.ko});
