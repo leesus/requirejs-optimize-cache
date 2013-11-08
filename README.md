@@ -35,5 +35,5 @@ require([config], function(){
 ## Future plans
 
 - Add tests!
-- Make a cli to avoid having to hardcode the directory and config file paths
+- Documentation
 - Make a grunt plugin to first call r.js and then run the transform
