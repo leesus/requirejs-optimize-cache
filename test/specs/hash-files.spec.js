@@ -2,14 +2,13 @@
 
 var should = require('should'),
     sinon = require('sinon'),
-    fs = require('fs'),
-    hashFiles = require('../../src/hash-files.js'),
-    cleanFiles = require('../../src/clean-files.js')('./test');
+    md5 = require('md5'),
+    hashFiles = require('../../src/hash-files.js');
 
-describe('#cleanFiles()', function(){
+describe('#hashFiles()', function(){
 
   it('should exist', function(){
-    (typeof cleanFiles).should.equal('function');
+    (typeof hashFiles).should.equal('function');
   });
 
   beforeEach(function(){
