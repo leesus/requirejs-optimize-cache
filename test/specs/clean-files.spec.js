@@ -3,6 +3,7 @@
 var should = require('should'),
     sinon = require('sinon'),
     fs = require('fs'),
+    hashFiles = require('../../src/hash-files.js');
     cleanFiles = require('../../src/clean-files.js');
 
 describe('#cleanFiles()', function(){
@@ -11,12 +12,15 @@ describe('#cleanFiles()', function(){
     (typeof cleanFiles).should.equal('function');
   });
 
-  before(function(){
-    sinon.stub(fs, 'readFile');
+  beforeEach(function(){
+    var readFile = sinon.stub(fs, 'readFile'),
+        hashFiles = sinon.stub('hashFiles');
+    readFile.withArgs('./test/submodule1/file1.txt', function(err, file){}).yields()
   });
 
-  after(function () {
+  afterEach(function () {
     fs.readFile.restore();
+    hashFiles.restore();
   });
 
   describe('when passed a file', function(){
@@ -32,7 +36,7 @@ describe('#cleanFiles()', function(){
       rfCallback.called.should.equal.true;
     });
 
-    it('should ignore config files or build summaries', function(){
+    it('should ignore config files and build summary files', function(){
       var next = sinon.spy(),
           rfCallback = sinon.spy();
       
@@ -47,6 +51,23 @@ describe('#cleanFiles()', function(){
       next.called.should.equal.true;
       fs.readFile.called.should.equal.false;
       rfCallback.called.should.equal.false;
+    });
+
+  });
+
+  describe('when calling fs.readFile()', function(){
+
+    it('should pass the data to hashFiles()', function(){
+      var callback = function(err, file){},
+          fileContents = '<li class="step">1</li><li class="step">2</li><li class="step">3</li>';
+      fs.readFile.withArgs('./test/submodule1/file1.txt', callback).returns(null, fileContents);
+      fs.readFile.withArgs('./test/dogpoo', callback).returns(new Error(), null);
+
+      
+    });
+
+    it('should handle errors', function(){
+
     });
 
   });
