@@ -9,7 +9,7 @@ function cleanFiles(basedir, stat, next) {
   // given ./test/submodule1/file1.txt
   var file = stat.name, //file1.txt
       path = basedir + '/' + file, //./test/submodule1/file1.txt
-      basedir = basedir.replace(dir + '/', ''), //submodule1
+      //basedir = basedir.replace(dir + '/', ''), //submodule1
       fileName = file.substring(0, file.lastIndexOf('.')), //file1
       extension = file.substring(file.lastIndexOf('.') + 1, file.length),//txt
       moduleName =  basedir + '/' + fileName, //submodule1/file1
