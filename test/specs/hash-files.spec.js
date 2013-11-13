@@ -3,9 +3,9 @@
 var should = require('should'),
     sinon = require('sinon'),
     md5 = require('md5'),
-    files = require('../../src/files-array.js'),
+    filesArray = require('../../src/walker.js').filesArray,
     fs = require('fs'),
-    hashFiles = require('../../src/hash-files.js');
+    hashFiles = require('../../src/walker.js').hashFiles;
 
 describe('#hashFiles()', function(){
 
@@ -41,13 +41,13 @@ describe('#hashFiles()', function(){
       this.next.called.should.equal.true;
     });
 
-    it('should add the file stats to the global files array', function(){
-      files.length = 0;
-      files.length.should.equal(0);
+    it('should add the file stats to the files array', function(){
+      filesArray.length = 0;
+      filesArray.length.should.equal(0);
 
       hashFiles(this.fileContent, this.stats, this.next);
 
-      files.length.should.equal(1);
+      filesArray.length.should.equal(1);
     });
 
     it('should call fs.rename() with the hash before the extension', function(){

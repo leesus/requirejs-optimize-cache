@@ -4,7 +4,7 @@
   "description": "Analyse require.js optimised files, rename files with MD5 string and map paths in require.config",
   "main": "src/requirejs-optimize-cache.js",
   "scripts": {
-    "test": "mocha -R spec test/specs"
+    "test": "NODE_ENV=test mocha -R spec test/specs"
   },
   "bin": {
     "rjscache": "./bin/rjscache"

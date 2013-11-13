@@ -3,8 +3,8 @@
 var should = require('should'),
     sinon = require('sinon'),
     fs = require('fs'),
-    hashFiles = require('../../src/hash-files.js'),
-    cleanFiles = require('../../src/clean-files.js')('./test');
+    hashFiles = require('../../src/walker.js').hashFiles,
+    cleanFiles = require('../../src/walker.js').cleanFiles;
 
 describe('#cleanFiles()', function(){
 
