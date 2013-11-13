@@ -20,7 +20,8 @@ module.exports = function(dir) {
       fileName: fileName,
       extension: extension,
       moduleName: moduleName,
-      path: path
+      path: path,
+      dir: dir
     }
 
     if (fileName === 'config' || fileName === 'build') {

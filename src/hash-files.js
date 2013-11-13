@@ -11,7 +11,7 @@ function hashFiles(file, stats, next) {
       newFileName;
   stats.md5 = fileMD5;
 
-  newFileName = dir + '/' + stats.moduleName + '.' + stats.md5 + '.' + stats.extension;
+  newFileName = stats.dir + '/' + stats.moduleName + '.' + stats.md5 + '.' + stats.extension;
   
   files.push(stats);
   fs.rename(stats.path, newFileName, file, function(err){

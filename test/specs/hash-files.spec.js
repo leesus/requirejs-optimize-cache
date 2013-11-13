@@ -3,6 +3,8 @@
 var should = require('should'),
     sinon = require('sinon'),
     md5 = require('md5'),
+    files = require('../../src/files-array.js'),
+    fs = require('fs'),
     hashFiles = require('../../src/hash-files.js');
 
 describe('#hashFiles()', function(){
@@ -12,63 +14,60 @@ describe('#hashFiles()', function(){
   });
 
   beforeEach(function(){
-    var readFile = sinon.stub(fs, 'readFile');
+    sinon.stub(fs, 'rename');
+
+    this.fileContent = '<li class="step">1</li><li class="step">2</li><li class="step">3</li>';
+    this.stats = {
+      fileName: 'file1',
+      extension: 'txt',
+      moduleName: 'submodule1/file1',
+      path: './test/submodule1/file1.txt',
+      dir: './test'
+    };
+    this.next = sinon.spy();
   });
 
   afterEach(function () {
-    fs.readFile.restore();
+    fs.rename.restore();
   });
 
   describe('when passed a file', function(){
 
-    it('should call fs.readFile', function(){
-      var next = sinon.spy(),
-          rfCallback = sinon.spy();
-      
-      cleanFiles('../test_dir/submodule1', { name: 'file1.txt' }, next);
+    it('should hash the file contents', function(){
+      var testHash = md5(this.fileContent);
+      hashFiles(this.fileContent, this.stats, this.next);
 
-      next.called.should.equal.false;
-      fs.readFile.calledWith('./test/submodule1/file1.txt', rfCallback).should.equal.true;
-      rfCallback.called.should.equal.true;
+      this.stats.md5.should.equal(testHash);
+      this.next.called.should.equal.true;
     });
 
-    it('should ignore config files and build summary files', function(){
-      var next = sinon.spy(),
-          rfCallback = sinon.spy();
-      
-      cleanFiles('../test_dir', { name: 'config.js' }, next);
+    it('should add the file stats to the global files array', function(){
+      files.length = 0;
+      files.length.should.equal(0);
 
-      next.called.should.equal.true;
-      fs.readFile.called.should.equal.false;
-      rfCallback.called.should.equal.false;
-      
-      cleanFiles('../test_dir', { name: 'build.txt' }, next);
+      hashFiles(this.fileContent, this.stats, this.next);
 
-      next.called.should.equal.true;
-      fs.readFile.called.should.equal.false;
-      rfCallback.called.should.equal.false;
+      files.length.should.equal(1);
     });
 
-  });
+    it('should call fs.rename() with the hash before the extension', function(){
+      var testHash = md5(this.fileContent),
+          testPath = './test/submodule1/file1.' + testHash + '.txt',
+          calledOrigPath,
+          calledHashPath;
+      hashFiles(this.fileContent, this.stats, this.next);
 
-  describe('when fs.readFile() called', function(){
+      fs.rename.called.should.equal.true;
+      calledOrigPath = fs.rename.getCall(0).args[0];
+      calledHashPath = fs.rename.getCall(0).args[1];
+      calledOrigPath.should.equal(this.stats.path);
+      calledHashPath.should.equal(testPath);
+    });
 
-    it('should call hashFiles() with file data, stat object and callback', function(){
-      var stats = {
-            fileName: 'file1',
-            extension: 'txt',
-            moduleName: 'submodule1/file1',
-            path: './test/submodule1/file1.txt',
-            dogPoo: 'string'
-          },          
-          fileContent = '<li class="step">1</li><li class="step">2</li><li class="step">3</li>',
-          next = sinon.spy(),
-          hashFiles = sinon.stub();
+    it('should call the callback', function(){
+      hashFiles(this.fileContent, this.stats, this.next);
 
-      cleanFiles('../test_dir/submodule1', { name: 'file1.txt' }, next);
-
-      next.called.should.equal.false;
-      hashFiles.calledWith(fileContent, stats, next).should.equal.true;
+      this.next.called.should.equal.true;
     });
 
   });
