@@ -1,1 +1,0 @@
-requirejs.config({baseUrl:"/scripts/dist/"}),define("jquery",[],function(){return window.jQuery}),define("ko",[],function(){return window.ko});
